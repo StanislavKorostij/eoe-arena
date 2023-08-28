@@ -159,7 +159,6 @@ SERVER.init = function () {
 
   // encrytpion
   md5 = require('md5');
-  crypto = require('crypto');
 
   // load shared utilities
   SHARED = require('./shared/utils.js');
@@ -309,7 +308,8 @@ SERVER.loginUser = function (data) {
   return new Promise((resolve, reject) => {
     SERVER.db.users.findOne({ name: data.username, pass: data.password }, function (err, res) {
       if (res) { // found something
-        var token = crypto.randomBytes(64).toString('base64');
+        var { nanoid } = require('nanoid');
+        const token = nanoid(64)
         var user = new SERVER.User({
           id: res._id, // id from database
           socket: SERVER.getSocketById(data.socket_id),
